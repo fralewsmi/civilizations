@@ -46,6 +46,33 @@ const REFS = [
     refs: [
       {
         type: "Book",
+        title: "The Civilization of the Renaissance in Italy",
+        author: "Jacob Burckhardt (1860)",
+        note: "The foundational text that established the concept of the Renaissance as a historical period.",
+        url: "https://www.gutenberg.org/ebooks/2074",
+      },
+      {
+        type: "Book",
+        title: "The Origins of the Industrial Revolution",
+        author: "T.S. Ashton (1948)",
+        note: "Concise classic on the social and economic preconditions for British industrialisation.",
+        url: "https://www.amazon.com/Industrial-Revolution-1760-1830-T-S-Ashton/dp/0192830198",
+      },
+      {
+        type: "Book",
+        title: "The Wealth of Nations",
+        author: "Adam Smith (1776)",
+        note: "Written at the dawn of the Industrial Revolution; foundational text of modern economics.",
+        url: "https://www.gutenberg.org/ebooks/3300",
+      },
+    ],
+  },
+  {
+    region: "Mediterranean",
+    col: "#d4a832",
+    refs: [
+      {
+        type: "Book",
         title: "The Greeks: A Portrait of Self and Others",
         author: "Paul Cartledge (2002)",
         note: "Accessible yet rigorous exploration of Greek identity, politics, and society.",
@@ -73,27 +100,6 @@ const REFS = [
         url: "https://press.princeton.edu/books/paperback/9780691143682/byzantium",
       },
       {
-        type: "Book",
-        title: "The Civilization of the Renaissance in Italy",
-        author: "Jacob Burckhardt (1860)",
-        note: "The foundational text that established the concept of the Renaissance as a historical period.",
-        url: "https://www.gutenberg.org/ebooks/2074",
-      },
-      {
-        type: "Book",
-        title: "The Origins of the Industrial Revolution",
-        author: "T.S. Ashton (1948)",
-        note: "Concise classic on the social and economic preconditions for British industrialisation.",
-        url: "https://www.amazon.com/Industrial-Revolution-1760-1830-T-S-Ashton/dp/0192830198",
-      },
-      {
-        type: "Book",
-        title: "The Wealth of Nations",
-        author: "Adam Smith (1776)",
-        note: "Written at the dawn of the Industrial Revolution; foundational text of modern economics.",
-        url: "https://www.gutenberg.org/ebooks/3300",
-      },
-      {
         type: "Web",
         title: "Perseus Digital Library — Greek & Roman Texts",
         author: "Tufts University",
@@ -103,7 +109,7 @@ const REFS = [
     ],
   },
   {
-    region: "Mediterranean & Middle East",
+    region: "Mesopotamia & West Asia",
     col: "#c8922a",
     refs: [
       {
@@ -285,9 +291,10 @@ const REFS = [
 const REGIONS = [
   { id: "americas", label: "Americas", col: "#c0622a" },
   { id: "europe", label: "Europe", col: "#3a7ab8" },
+  { id: "mediterranean", label: "Mediterranean", col: "#d4a832" },
   {
-    id: "medit",
-    label: "Mediterranean &\nMiddle East",
+    id: "neareast",
+    label: "Mesopotamia &\nWest Asia",
     col: "#c8922a",
   },
   { id: "africa", label: "Africa", col: "#5aaa3a" },
@@ -387,7 +394,7 @@ const CIVS = [
     ],
   },
   {
-    region: "europe",
+    region: "mediterranean",
     name: "Minoan",
     start: -2700,
     end: -1100,
@@ -402,7 +409,7 @@ const CIVS = [
     ],
   },
   {
-    region: "europe",
+    region: "mediterranean",
     name: "Classical Greece",
     start: -800,
     end: -146,
@@ -422,7 +429,7 @@ const CIVS = [
     ],
   },
   {
-    region: "europe",
+    region: "mediterranean",
     name: "Roman Empire",
     start: -27,
     end: 476,
@@ -442,7 +449,7 @@ const CIVS = [
     ],
   },
   {
-    region: "europe",
+    region: "mediterranean",
     name: "Byzantine Empire",
     start: 330,
     end: 1453,
@@ -457,7 +464,7 @@ const CIVS = [
     ],
   },
   {
-    region: "europe",
+    region: "mediterranean",
     name: "Renaissance Europe",
     start: 1400,
     end: 1620,
@@ -472,7 +479,7 @@ const CIVS = [
     ],
   },
   {
-    region: "medit",
+    region: "neareast",
     name: "Sumer",
     start: -3500,
     end: -1900,
@@ -492,7 +499,7 @@ const CIVS = [
     ],
   },
   {
-    region: "medit",
+    region: "neareast",
     name: "Akkadian Empire",
     start: -2334,
     end: -2154,
@@ -507,7 +514,7 @@ const CIVS = [
     ],
   },
   {
-    region: "medit",
+    region: "neareast",
     name: "Babylon",
     start: -1894,
     end: -539,
@@ -527,7 +534,7 @@ const CIVS = [
     ],
   },
   {
-    region: "medit",
+    region: "neareast",
     name: "Phoenicia",
     start: -1550,
     end: -300,
@@ -542,7 +549,7 @@ const CIVS = [
     ],
   },
   {
-    region: "medit",
+    region: "neareast",
     name: "Achaemenid Persia",
     start: -550,
     end: -330,
@@ -557,7 +564,7 @@ const CIVS = [
     ],
   },
   {
-    region: "medit",
+    region: "neareast",
     name: "Islamic Golden Age",
     start: 622,
     end: 1258,
@@ -572,7 +579,7 @@ const CIVS = [
     ],
   },
   {
-    region: "medit",
+    region: "neareast",
     name: "Ottoman Empire",
     start: 1299,
     end: 1922,
@@ -852,7 +859,7 @@ const CIVS = [
     ],
   },
   {
-    region: "europe",
+    region: "mediterranean",
     name: "British Industrial Revolution",
     start: 1760,
     end: 1900,
@@ -917,7 +924,7 @@ const CIVS = [
     ],
   },
   {
-    region: "medit",
+    region: "neareast",
     name: "Modern Middle East",
     start: 1900,
     end: 2026,
