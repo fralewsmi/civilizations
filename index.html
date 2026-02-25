@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Civilizations — Geographic Streams Timeline</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cinzel:wght@400;600&family=EB+Garamond:ital,wght@0,400;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Empires of the <em>Ancient &amp; Modern World</em></h1>
+      <p class="subtitle">
+        Six geographic streams · bar height proportional to each civilisation's
+        duration · hover to explore
+      </p>
+      <div class="hdiv"></div>
+    </header>
+
+    <div class="legend" id="legend"></div>
+
+    <div id="chart-outer">
+      <canvas id="c"></canvas>
+    </div>
+
+    <div id="tt">
+      <div class="tn"></div>
+      <div class="td"></div>
+      <div class="tb"></div>
+      <div class="tg"></div>
+      <div class="tc">
+        <div class="tc-label">Further Reading</div>
+        <div class="tc-items"></div>
+      </div>
+    </div>
+
+    <footer>
+      Bar height is proportional to each civilisation's duration. Each
+      geographic stream represents a region of the world — hover any bar to
+      explore dates, context, and key achievements.
+    </footer>
+
+    <section id="references">
+      <div class="ref-header">
+        <span class="eyebrow">Scholarship & Sources</span>
+        <h2>References &amp; <em>Further Reading</em></h2>
+      </div>
+
+      <div class="ref-grid" id="ref-grid"></div>
+
+      <div class="general-resources">
+        <h3>Cross-civilisation &amp; General Resources</h3>
+        <div class="res-grid" id="res-grid"></div>
+      </div>
+
+      <p class="note">
+        Dates for ancient civilisations are approximate and subject to ongoing
+        scholarly revision.<br />
+        Where sources disagree, ranges represent the most widely accepted
+        academic consensus as of 2024.
+      </p>
+    </section>
+
+    <script src="script.js"></script>
+  </body>
+</html>
