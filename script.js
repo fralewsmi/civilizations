@@ -1149,7 +1149,7 @@ function draw() {
 
     if (major) {
       ctx.fillStyle = "rgba(212,168,50,0.5)";
-      ctx.font = "600 9px Cinzel, serif";
+      ctx.font = "600 11px Cinzel, serif";
       ctx.textAlign = "right";
       ctx.textBaseline = "middle";
       const lbl =
@@ -1189,7 +1189,7 @@ function draw() {
 
     // header text
     ctx.fillStyle = "rgba(240,230,200,0.92)";
-    ctx.font = "600 9.5px Cinzel, serif";
+    ctx.font = "600 11px Cinzel, serif";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     const lines = region.label.split("\n");
@@ -1259,17 +1259,37 @@ function draw() {
           ctx.save();
           ctx.translate(bx + barW / 2, by + bh / 2);
           ctx.rotate(-Math.PI / 2);
-          const fs = Math.min(11, Math.max(7, barW * 0.36));
+          const fs = Math.min(13, Math.max(9, barW * 0.36));
           ctx.font = `italic ${fs}px EB Garamond, serif`;
           ctx.fillStyle = "rgba(240,230,200,0.92)";
           ctx.textAlign = "center";
           ctx.textBaseline = "middle";
-          let lbl = civ.name;
+
+          // Wrap text to fit in available height (bh)
+          const words = civ.name.split(" ");
           const maxPx = bh - 10;
-          while (ctx.measureText(lbl + "…").width > maxPx && lbl.length > 2)
-            lbl = lbl.slice(0, -1);
-          if (lbl !== civ.name) lbl += "…";
-          ctx.fillText(lbl, 0, 0);
+          const lineHeight = fs * 1.2;
+          const lines = [];
+          let currentLine = "";
+
+          for (const word of words) {
+            const testLine = currentLine ? currentLine + " " + word : word;
+            const width = ctx.measureText(testLine).width;
+            if (width > maxPx && currentLine) {
+              lines.push(currentLine);
+              currentLine = word;
+            } else {
+              currentLine = testLine;
+            }
+          }
+          if (currentLine) lines.push(currentLine);
+
+          // Draw lines centered vertically
+          const startY = (-(lines.length - 1) * lineHeight) / 2;
+          lines.forEach((line, i) => {
+            ctx.fillText(line, 0, startY + i * lineHeight);
+          });
+
           ctx.restore();
         }
 
@@ -1286,7 +1306,7 @@ function draw() {
 
   // Bottom axis label
   ctx.fillStyle = "rgba(212,168,50,0.35)";
-  ctx.font = "600 9px Cinzel, serif";
+  ctx.font = "600 11px Cinzel, serif";
   ctx.textAlign = "center";
   ctx.fillText("2026 CE  ·  PRESENT", AXIS_W + TOTAL_W / 2, CANVAS_H - 20);
 }
