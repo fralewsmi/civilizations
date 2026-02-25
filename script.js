@@ -42,7 +42,7 @@ const REFS = [
   },
   {
     region: "Europe",
-    col: "#3a7ab8",
+    col: "#456080",
     refs: [
       {
         type: "Book",
@@ -110,7 +110,7 @@ const REFS = [
   },
   {
     region: "Mesopotamia & West Asia",
-    col: "#c8922a",
+    col: "#1a5f7a",
     refs: [
       {
         type: "Book",
@@ -158,7 +158,7 @@ const REFS = [
   },
   {
     region: "Africa",
-    col: "#5aaa3a",
+    col: "#8b0000",
     refs: [
       {
         type: "Book",
@@ -199,7 +199,7 @@ const REFS = [
   },
   {
     region: "South Asia",
-    col: "#a04ac0",
+    col: "#7d3c98",
     refs: [
       {
         type: "Book",
@@ -240,7 +240,7 @@ const REFS = [
   },
   {
     region: "East Asia",
-    col: "#2aaa8a",
+    col: "#2d5016",
     refs: [
       {
         type: "Book",
@@ -290,16 +290,16 @@ const REFS = [
 
 const REGIONS = [
   { id: "americas", label: "Americas", col: "#c0622a" },
-  { id: "europe", label: "Europe", col: "#3a7ab8" },
-  { id: "mediterranean", label: "Mediterranean", col: "#d4a832" },
+  { id: "europe", label: "Europe", col: "#456080" },
+  { id: "mediterranean", label: "Mediterranean &\nClassical", col: "#d4a832" },
   {
     id: "neareast",
     label: "Mesopotamia &\nWest Asia",
-    col: "#c8922a",
+    col: "#1a5f7a",
   },
-  { id: "africa", label: "Africa", col: "#5aaa3a" },
-  { id: "southasia", label: "South Asia", col: "#a04ac0" },
-  { id: "eastasia", label: "East Asia", col: "#2aaa8a" },
+  { id: "africa", label: "Africa", col: "#8b0000" },
+  { id: "southasia", label: "South Asia", col: "#7d3c98" },
+  { id: "eastasia", label: "East Asia", col: "#2d5016" },
 ];
 
 const CIVS = [
@@ -1188,7 +1188,7 @@ function draw() {
     ctx.fillRect(lx, 65, lw, 2);
 
     // header text
-    ctx.fillStyle = `rgba(${rgb.r + 60},${rgb.g + 60},${rgb.b + 60},1)`;
+    ctx.fillStyle = "rgba(240,230,200,0.92)";
     ctx.font = "600 9.5px Cinzel, serif";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
