@@ -956,7 +956,6 @@ const CIVS = [
 ];
 
 const refGrid = document.getElementById("ref-grid");
-const resGrid = document.getElementById("res-grid");
 const legend = document.getElementById("legend");
 
 REFS.forEach((group) => {
