@@ -109,6 +109,9 @@ canvas {
   border-radius: 2px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.7);
 }
+#tt.pinned {
+  pointer-events: auto;
+}
 #tt.show {
   opacity: 1;
 }
@@ -234,10 +237,11 @@ footer {
 }
 
 .ref-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  display: flex;
+  flex-direction: column;
   gap: 16px;
   margin-top: 10px;
+  width: 100%;
 }
 
 .ref-group {
@@ -246,6 +250,10 @@ footer {
   border-radius: 2px;
   overflow: hidden;
   transition: border-color 0.3s;
+}
+
+.ref-group {
+  width: 100%;
 }
 .ref-group:hover {
   border-color: rgba(212, 168, 50, 0.28);
@@ -288,11 +296,16 @@ footer {
 }
 
 .ref-list {
-  display: none;
-  padding: 4px 0 8px;
+  max-height: 0;
+  overflow: hidden;
+  padding: 0 0 0;
+  transition:
+    max-height 0.32s ease,
+    padding 0.28s ease;
 }
 .ref-group.open .ref-list {
-  display: block;
+  max-height: 640px; /* large enough for expanded content */
+  padding: 4px 0 8px;
 }
 
 .ref-item {

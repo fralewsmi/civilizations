@@ -1025,9 +1025,31 @@ function maxParallel(rid) {
   return Math.max(mx, 1);
 }
 
-const maxCols = Math.max(...REGIONS.map((r) => maxParallel(r.id)));
-const EQUAL_LANE_W = maxCols * (MIN_BAR_W + BAR_GAP) + LANE_PAD * 2;
-const laneWidths = REGIONS.map(() => EQUAL_LANE_W);
+let laneWidths = [];
+let TOTAL_W = 0;
+let CANVAS_W = 0;
+
+function computeLayout() {
+  // base per-region width from how many parallel columns are needed
+  const baseWidths = REGIONS.map((r) => {
+    const cols = maxParallel(r.id);
+    return cols * (MIN_BAR_W + BAR_GAP) + LANE_PAD * 2;
+  });
+
+  // natural total for base widths
+  const naturalTotal = baseWidths.reduce((a, b) => a + b, 0);
+
+  // available width inside the chart outer element (full page width)
+  const outer = document.getElementById("chart-outer");
+  const available = Math.max(600, outer.clientWidth - AXIS_W - 20);
+
+  const scale = Math.max(0.48, available / naturalTotal);
+
+  laneWidths = baseWidths.map((w) => Math.max(36, Math.floor(w * scale)));
+
+  TOTAL_W = laneWidths.reduce((a, b) => a + b, 0);
+  CANVAS_W = AXIS_W + TOTAL_W + 10;
+}
 
 function laneX(i) {
   let x = AXIS_W;
@@ -1035,10 +1057,17 @@ function laneX(i) {
   return x;
 }
 
-const TOTAL_W = laneWidths.reduce((a, b) => a + b, 0);
-const CANVAS_W = AXIS_W + TOTAL_W + 10;
-
 let hitBoxes = [];
+
+let pinned = false;
+let pinnedCiv = null;
+
+// initial layout and responsive redraw
+computeLayout();
+window.addEventListener("resize", () => {
+  computeLayout();
+  draw();
+});
 
 function hexRgb(hex) {
   return {
@@ -1066,6 +1095,9 @@ function rRect(x, y, w, h, r) {
 function draw() {
   canvas.width = CANVAS_W;
   canvas.height = CANVAS_H;
+  // keep CSS size in sync so outer container scroll works as expected
+  canvas.style.width = CANVAS_W + "px";
+  canvas.style.height = CANVAS_H + "px";
 
   // Background
   ctx.fillStyle = "#08070a";
@@ -1233,6 +1265,7 @@ function draw() {
 
 // Tooltip
 canvas.addEventListener("mousemove", (e) => {
+  if (pinned) return; // when pinned, ignore hover updates
   const rect = canvas.getBoundingClientRect();
   const sx = canvas.width / rect.width;
   const sy = canvas.height / rect.height;
@@ -1285,10 +1318,89 @@ canvas.addEventListener("mousemove", (e) => {
     tt.classList.add("show");
   } else {
     canvas.style.cursor = "crosshair";
-    tt.classList.remove("show");
+    if (!pinned) tt.classList.remove("show");
   }
 });
 
-canvas.addEventListener("mouseleave", () => tt.classList.remove("show"));
+canvas.addEventListener("mouseleave", () => {
+  if (!pinned) tt.classList.remove("show");
+});
+
+// Click to pin tooltip on an entry; click elsewhere to unpin/hide
+canvas.addEventListener("click", (e) => {
+  const rect = canvas.getBoundingClientRect();
+  const sx = canvas.width / rect.width;
+  const sy = canvas.height / rect.height;
+  const mx = (e.clientX - rect.left) * sx;
+  const my = (e.clientY - rect.top) * sy;
+
+  let hit = null;
+  for (const hb of hitBoxes) {
+    if (mx >= hb.x1 && mx <= hb.x2 && my >= hb.y1 && my <= hb.y2) {
+      hit = hb.civ;
+      break;
+    }
+  }
+
+  if (hit) {
+    pinned = true;
+    pinnedCiv = hit;
+    // show tooltip at click position
+    const sl = hit.start < 0 ? `${Math.abs(hit.start)} BCE` : `${hit.start} CE`;
+    const el =
+      hit.end >= 2025
+        ? "Present"
+        : hit.end < 0
+          ? `${Math.abs(hit.end)} BCE`
+          : `${hit.end} CE`;
+    const dur = hit.end - hit.start;
+    tt.querySelector(".tn").textContent = hit.name;
+    tt.querySelector(".td").textContent = `${sl} – ${el}  ·  c.${dur} years`;
+    tt.querySelector(".tb").textContent = hit.desc;
+    tt.querySelector(".tg").innerHTML = hit.tags
+      .map((t) => `<span>${t}</span>`)
+      .join("");
+    const tcEl = tt.querySelector(".tc");
+    const tcItems = tt.querySelector(".tc-items");
+    if (hit.refs && hit.refs.length) {
+      tcItems.innerHTML = hit.refs
+        .map(
+          (r) =>
+            `<div class="tc-item"><a href="${r.url}" target="_blank" rel="noopener">${r.title}</a> — ${r.author}</div>`,
+        )
+        .join("");
+      tcEl.style.display = "block";
+    } else {
+      tcEl.style.display = "none";
+    }
+    let tx = e.clientX + 18,
+      ty = e.clientY - 12;
+    if (tx + 310 > window.innerWidth) tx = e.clientX - 308;
+    if (ty + 230 > window.innerHeight) ty = e.clientY - 230;
+    tt.style.left = tx + "px";
+    tt.style.top = ty + "px";
+    tt.classList.add("show");
+    tt.classList.add("pinned");
+  } else {
+    // click not on an entry -> unpin/hide
+    pinned = false;
+    pinnedCiv = null;
+    tt.classList.remove("show");
+    tt.classList.remove("pinned");
+  }
+});
+
+// clicking anywhere outside canvas or tooltip should unpin
+document.addEventListener("click", (e) => {
+  if (
+    e.target.closest &&
+    (e.target.closest("#tt") || e.target.closest("canvas"))
+  )
+    return;
+  pinned = false;
+  pinnedCiv = null;
+  tt.classList.remove("show");
+  tt.classList.remove("pinned");
+});
 
 draw();
