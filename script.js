@@ -953,37 +953,58 @@ const resGrid = document.getElementById("res-grid");
 const legend = document.getElementById("legend");
 
 REFS.forEach((group) => {
-  const div = document.createElement("div");
-  div.className = "ref-group";
-  div.innerHTML = `
-    <div class="ref-group-header" onclick="this.parentElement.classList.toggle('open')">
-      <div class="ref-swatch" style="background:${group.col}"></div>
-      <div class="ref-group-title">${group.region}</div>
-      <div class="ref-toggle">▾</div>
-    </div>
-    <div class="ref-list">
+  const article = document.createElement("article");
+  article.className = "ref-group";
+  article.setAttribute("role", "listitem");
+  article.innerHTML = `
+    <header class="ref-group-header" role="button" tabindex="0" aria-expanded="false" aria-controls="ref-list-${group.region.replace(/\s+/g, "-").toLowerCase()}">
+      <div class="ref-swatch" style="background:${group.col}" aria-label="${group.region} theme color"></div>
+      <h3 class="ref-group-title">${group.region}</h3>
+      <span class="ref-toggle" aria-hidden="true">▾</span>
+    </header>
+    <ul class="ref-list" id="ref-list-${group.region.replace(/\s+/g, "-").toLowerCase()}" role="list" hidden>
       ${group.refs
         .map(
           (r) => `
-        <div class="ref-item">
+        <li class="ref-item" role="listitem">
           <div class="ref-item-top">
             <span class="ref-type">${r.type}</span>
             <span class="ref-title">${r.url ? `<a href="${r.url}" target="_blank" rel="noopener">${r.title}</a>` : r.title}</span>
           </div>
           <div class="ref-meta">${r.author} — ${r.note}</div>
-        </div>`,
+        </li>`,
         )
         .join("")}
-    </div>`;
-  if (REFS.indexOf(group) < 2) div.classList.add("open");
-  refGrid.appendChild(div);
+    </ul>`;
+
+  const header = article.querySelector(".ref-group-header");
+  header.addEventListener("click", () => {
+    const isOpen = article.classList.toggle("open");
+    header.setAttribute("aria-expanded", isOpen);
+    const list = article.querySelector(".ref-list");
+    list.hidden = !isOpen;
+  });
+  header.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      header.click();
+    }
+  });
+
+  if (REFS.indexOf(group) < 2) {
+    article.classList.add("open");
+    header.setAttribute("aria-expanded", "true");
+    article.querySelector(".ref-list").hidden = false;
+  }
+  refGrid.appendChild(article);
 });
 
 REGIONS.forEach((r) => {
-  const d = document.createElement("div");
-  d.className = "leg-item";
-  d.innerHTML = `<div class="leg-swatch" style="background:${r.col}"></div><span>${r.label.replace("\n", " ")}</span>`;
-  legend.appendChild(d);
+  const item = document.createElement("li");
+  item.className = "leg-item";
+  item.setAttribute("aria-label", `${r.label.replace("\n", " ")} stream`);
+  item.innerHTML = `<div class="leg-swatch" style="background:${r.col}" aria-hidden="true"></div><span>${r.label.replace("\n", " ")}</span>`;
+  legend.appendChild(item);
 });
 
 //  Canvas
@@ -1302,7 +1323,7 @@ canvas.addEventListener("mousemove", (e) => {
       tcItems.innerHTML = hit.refs
         .map(
           (r) =>
-            `<div class="tc-item"><a href="${r.url}" target="_blank" rel="noopener">${r.title}</a> — ${r.author}</div>`,
+            `<li class="tc-item"><a href="${r.url}" target="_blank" rel="noopener">${r.title}</a> — ${r.author}</li>`,
         )
         .join("");
       tcEl.style.display = "block";
@@ -1345,6 +1366,7 @@ canvas.addEventListener("click", (e) => {
   if (hit) {
     pinned = true;
     pinnedCiv = hit;
+    tt.setAttribute("aria-hidden", "false");
     // show tooltip at click position
     const sl = hit.start < 0 ? `${Math.abs(hit.start)} BCE` : `${hit.start} CE`;
     const el =
@@ -1366,7 +1388,7 @@ canvas.addEventListener("click", (e) => {
       tcItems.innerHTML = hit.refs
         .map(
           (r) =>
-            `<div class="tc-item"><a href="${r.url}" target="_blank" rel="noopener">${r.title}</a> — ${r.author}</div>`,
+            `<li class="tc-item"><a href="${r.url}" target="_blank" rel="noopener">${r.title}</a> — ${r.author}</li>`,
         )
         .join("");
       tcEl.style.display = "block";
@@ -1387,6 +1409,7 @@ canvas.addEventListener("click", (e) => {
     pinnedCiv = null;
     tt.classList.remove("show");
     tt.classList.remove("pinned");
+    tt.setAttribute("aria-hidden", "true");
   }
 });
 
@@ -1401,6 +1424,7 @@ document.addEventListener("click", (e) => {
   pinnedCiv = null;
   tt.classList.remove("show");
   tt.classList.remove("pinned");
+  tt.setAttribute("aria-hidden", "true");
 });
 
 draw();

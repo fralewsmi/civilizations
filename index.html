@@ -21,32 +21,37 @@
 
     <div class="legend" id="legend"></div>
 
-    <div id="chart-outer">
+    <div
+      id="chart-outer"
+      role="img"
+      aria-label="Interactive timeline of civilizations organized by geographic region"
+    >
       <canvas id="c"></canvas>
     </div>
 
-    <div id="tt">
-      <div class="tn"></div>
+    <div id="tt" role="tooltip" aria-hidden="true">
+      <h3 class="tn"></h3>
       <div class="td"></div>
-      <div class="tb"></div>
-      <div class="tg"></div>
-      <div class="tc">
-        <div class="tc-label">Further Reading</div>
-        <div class="tc-items"></div>
-      </div>
+      <p class="tb"></p>
+      <div class="tg" role="region" aria-label="Civilization tags"></div>
+      <aside class="tc">
+        <h4 class="tc-label">Further Reading</h4>
+        <ul class="tc-items"></ul>
+      </aside>
     </div>
 
     <section id="references">
-      <div class="ref-header">
+      <header class="ref-header">
         <span class="eyebrow">Scholarship & Sources</span>
         <h2>References &amp; <em>Further Reading</em></h2>
-      </div>
+      </header>
 
-      <div class="ref-grid" id="ref-grid"></div>
-      <div class="general-resources">
+      <div class="ref-grid" id="ref-grid" role="list"></div>
+
+      <section class="general-resources">
         <h3>Cross-civilisation &amp; General Resources</h3>
-        <div class="res-grid" id="res-grid"></div>
-      </div>
+        <div class="res-grid" id="res-grid" role="list"></div>
+      </section>
     </section>
 
     <script src="script.js"></script>
